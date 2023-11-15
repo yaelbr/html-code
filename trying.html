@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Image</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+    <style>
+        #img {
+            position: absolute;
+            left: 23%;
+            width: 425px;
+        }
+
+        #divAll {
+            position: relative;
+        }
+        H2{
+            position: absolute;
+            left: 23%;
+        }
+    </style>
+</head>
+
+<body id="body">
+    <div id="divAll">
+        <img src="https://static.wixstatic.com/media/3ab37f_d1b206f349ac4121a0ca48845a5b984f~mv2.jpg" id="img" />
+        <h2>aaa</h2>
+    </div>
+    <script>
+        convertImg();
+        function convertImg() {
+            let scale = 2;
+            const divElement = document.getElementById('img');
+            const options = {
+                format: 'png',
+                quality: 1,
+                width: 1700,
+                height: 2000,
+
+            };
+            console.log('options', options);
+            domtoimage.toPng(divElement, options)
+                .then(function (dataUrl) {
+                    const capturedImage = new Image();
+                    capturedImage.src = dataUrl;
+                    console.log('dataUrl', dataUrl);
+                    //window.parent.postMessage(JSON.stringify(dataUrl), 'https://yaels936.wixsite.com/dynamic-form/form');
+
+                })
+                .catch(function (error) {
+                    console.error('Error capturing the div element:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

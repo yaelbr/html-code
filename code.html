@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Full-width input fields */
+    input {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    /* Add a background color when the inputs get focus */
+    input:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .checkbox-container {
+        background-color: #f1f1f1;
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+    .container-title {
+        font-weight: bold;
+    }
+
+    .checkbox-item {
+        margin-bottom: 5px;
+        background-color: #f1f1f1;
+        margin-top: 5px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        margin-right: 5px;
+        width: 5%;
+
+    }
+
+    .checkbox-item input[type="radio"] {
+        margin-right: 5px;
+        width: 5%;
+
+    }
+
+    .checkbox-item label {
+        margin: 0;
+        display: inline-block;
+        font-weight: normal;
+    }
+
+    .select-container select {
+        width: 100%;
+        padding: 12px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .select-container select option {
+        padding: 8px;
+    }
+
+    .select-container select:focus {
+        outline: none;
+        border-color: #aaa;
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .select-container select option:checked {
+        background-color: #ddd;
+    }
+
+    .select-container select option:hover {
+        background-color: #f5f5f5;
+    }
+
+    select option {
+        font-size: 3vh;
+    }
+
+
+    /* Set a style for all buttons */
+    button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    button:hover {
+        opacity: 1;
+    }
+
+    /* Extra styles for the cancel button */
+    .cancelbtn {
+        padding: 14px 20px;
+        background-color: #f44336;
+    }
+
+    /* Float cancel and signup buttons and add an equal width */
+    .cancelbtn,
+    .signupbtn {
+        float: left;
+        width: 50%;
+    }
+
+    /* Add padding to container elements */
+    .container {
+        padding: 16px;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: #474e5d;
+        padding-top: 50px;
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto;
+        /* 5% from the top, 15% from the bottom and centered */
+        border: 1px solid #888;
+        width: 80%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    /* Style the horizontal ruler */
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+    }
+
+    /* The Close Button (x) */
+    .close {
+        position: absolute;
+        right: 35px;
+        top: 15px;
+        font-size: 40px;
+        font-weight: bold;
+        color: #f1f1f1;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #f44336;
+        cursor: pointer;
+    }
+
+    /* Clear floats */
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Change styles for cancel button and signup button on extra small screens */
+    @media screen and (max-width: 300px) {
+
+        .cancelbtn,
+        .signupbtn {
+            width: 100%;
+        }
+    }
+
+    canvas {
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+        margin-right: 3%;
+        margin-bottom: 3%;
+    }
+
+    #main-container-signature {
+        display: flex;
+    }
+
+    #finishSignature {
+        width: 30%;
+        margin-left: 5%;
+        height: 1%;
+    }
+
+    #resetSignature {
+        width: 30%;
+        height: 1%;
+    }
+</style>
+
+<body>
+
+    <h2>Form</h2>
+    <div id="id01" class="modal">
+        <form id="form" class="modal-content">
+            <div class="container">
+                <div id="inputsAll">
+                    <p>Please fill in this form</p>
+                    <hr>
+                    <div id="main-container-checkbox">
+
+                    </div>
+                    <div id="main-container-select">
+
+                    </div>
+                    <div id="main-container-signature">
+
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <button type="button" class="cancelbtn" id="cancel">Cancel</button>
+                    <button type="submit" class="signupbtn" id="signup">Finish</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+
+        let imageData;
+        let num = 0;
+        let form = document.getElementById('form');
+        let inputsAll = document.getElementById('inputsAll');
+        let fullData;
+        const submitButton = document.getElementById('signup');
+        const cancelButton = document.getElementById('cancel');
+        cancelButton.addEventListener('click', function (event) {
+            form.reset();
+        });
+        submitButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            console.log('in submit button!');
+            fullData.signature.imageData = imageData;
+            window.parent.postMessage(JSON.stringify(fullData), 'https://yaels936.wixsite.com/dynamic-form/form');
+        });
+        window.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+            fullData = data;
+            await createTexts(data);
+            createCheckboxElement(data.checkbox);
+            createSelectElement(data.circle);
+            createSignatureElement(data.signature.width, data.signature.height);
+        };
+        async function createTexts(data) {
+            for (let i = 0; i < data.text.length; i++) {
+                createInputElement(data.text[i].type, data.text[i].value, i)
+            }
+        }
+        function createInputElement(type, value, index) {
+            let newInput = document.createElement('input');
+            newInput.type = type;
+            newInput.placeholder = 'enter ' + value;
+            newInput.name = 'text' + num++;
+            newInput.required = 'true';
+            newInput.addEventListener('change', function (event) {
+                console.log('data in newInput', event.target.value);
+                fullData.text[index].userValue = event.target.value;
+            })
+            let label = document.createElement('label');
+            let b = document.createElement('b');
+            b.innerText = value;
+            label.appendChild(b);
+            inputsAll.appendChild(label);
+            inputsAll.appendChild(newInput);
+        }
+        function createCheckboxElement(nestedArray) {
+            let container;
+            const mainContainer = document.getElementById('main-container-checkbox');
+            console.log('nestedArray', nestedArray);
+            nestedArray.forEach((array, index) => {
+                if (array.isMultiple) {
+                    container = document.createElement('div');
+                    container.classList.add('checkbox-container');
+                    const titleLabel = document.createElement('label');
+                    titleLabel.classList.add('container-title');
+                    titleLabel.textContent = array.title;
+                    container.appendChild(titleLabel);
+                    array.values.forEach((obj, ind) => {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'option' + obj.id;
+                        checkbox.name = 'options';
+                        const label = document.createElement('label');
+                        label.setAttribute('for', 'option' + obj.id);
+                        label.textContent = obj.value;
+                        const checkboxContainer = document.createElement('div');
+                        checkboxContainer.classList.add('checkbox-item');
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(label);
+                        container.appendChild(checkboxContainer);
+                        checkbox.addEventListener('change', function (event) {
+                            console.log('data in checkbox', event.target.checked);
+                            console.log(`fullData.checkbox[${index}].values[${ind}]`, fullData.checkbox[index].values[ind]);
+                            fullData.checkbox[index].values[ind].isChecked = event.target.checked;
+                            console.log('fullData', fullData);
+                        });
+                    });
+                }
+                else {
+                    container = document.createElement('div');
+                    container.classList.add('checkbox-container');
+                    const titleLabel = document.createElement('label');
+                    titleLabel.classList.add('container-title');
+                    titleLabel.textContent = array.title;
+                    container.appendChild(titleLabel);
+                    array.values.forEach((obj, ind) => {
+                        const radioBtn = document.createElement('input');
+                        radioBtn.type = 'radio';
+                        radioBtn.id = 'option' + obj.id;
+                        radioBtn.name = 'options';
+                        const label = document.createElement('label');
+                        label.setAttribute('for', 'option' + obj.id);
+                        label.textContent = obj.value;
+                        const radioContainer = document.createElement('div');
+                        radioContainer.classList.add('checkbox-item');
+                        radioContainer.appendChild(radioBtn);
+                        radioContainer.appendChild(label);
+                        container.appendChild(radioContainer);
+                        radioBtn.addEventListener('change', function (event) {
+                            console.log('data in radio button', event.target.checked);
+                            console.log(`fullData.checkbox[${index}].values[${ind}]`, fullData.checkbox[index].values[ind]);
+                            fullData.checkbox[index].values.forEach((val, i) => {
+                                val.isChecked = (i === ind) ? true : false;
+                            });
+                            console.log('fullData', fullData);
+                        });
+                    });
+                }
+                mainContainer.appendChild(container);
+            });
+        }
+        function createSelectElement(nestedArray) {
+            const mainContainer = document.getElementById('main-container-select');
+            console.log('nestedArray', nestedArray);
+            // Iterate over each nested array
+            nestedArray.forEach((array, index) => {
+                // Create a container for each nested array
+                const container = document.createElement('div');
+                container.classList.add('select-container');
+
+                // Add title label to the container
+                const titleLabel = document.createElement('label');
+                titleLabel.classList.add('container-title');
+                titleLabel.textContent = array.title;
+                container.appendChild(titleLabel);
+
+                // Create select element
+                const select = document.createElement('select');
+                select.id = `select${index + 1}`;
+                select.name = 'select';
+                select.addEventListener('change', function (event) {
+                    console.log('data in select', event.target.value);
+                    fullData.circle[index].userValue = event.target.selectedIndex;
+                });
+                // Iterate over each object in the nested array and create options
+                array.values.forEach((obj) => {
+                    const option = document.createElement('option');
+                    option.value = obj.value;
+                    option.textContent = obj.value;
+                    option.classList.add('select-option');
+                    select.appendChild(option);
+
+                });
+
+                // Add the select element to the container
+                container.appendChild(select);
+
+                // Add the container to the main container
+                mainContainer.appendChild(container);
+            });
+        }
+        function createSignatureElement(width, height) {
+            if (width && height) {
+                console.log('innn createSignatureElement 1216!');
+                // Create a div element for the signature container
+                const signatureContainer = document.getElementById('main-container-signature');
+                // Create a canvas element for drawing the signature
+                const canvas = document.createElement('canvas');
+                canvas.id = 'signatureCanvas';
+                canvas.width = width;
+                canvas.height = height;
+                canvas.style.borderBlockColor = 'black';
+                // Create a button for resetting the signature
+                const resetButton = document.createElement('button');
+                resetButton.textContent = 'Reset';
+                resetButton.id = 'resetSignature';
+                resetButton.addEventListener('click', function () {
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+
+                // Create a button for sending the signature
+                const sendButton = document.createElement('button');
+                sendButton.textContent = 'Finish';
+                sendButton.id = 'finishSignature';
+                sendButton.addEventListener('click', function () {
+                    imageData = canvas.toDataURL('image/png');
+                    //window.parent.postMessage({ signature: imageData }, '*');
+                });
+
+                // Variable to track if signature drawing has started
+                let isDrawing = false;
+
+                // Function to start drawing on the canvas
+                const startDrawing = function (event) {
+                    isDrawing = true;
+                    const ctx = canvas.getContext('2d');
+                    const rect = canvas.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                };
+
+                // Function to draw on the canvas
+                const draw = function (event) {
+                    if (!isDrawing) return;
+                    const ctx = canvas.getContext('2d');
+                    const rect = canvas.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                };
+
+                // Event listeners for drawing the signature
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', function () {
+                    isDrawing = false;
+                });
+                canvas.addEventListener('mouseout', function () {
+                    isDrawing = false;
+                });
+
+                // Append the canvas, reset button, and send button to the signature container
+                signatureContainer.appendChild(canvas);
+                signatureContainer.appendChild(resetButton);
+                signatureContainer.appendChild(sendButton);
+            }
+        }
+    </script>
+</body>
+
+</html>

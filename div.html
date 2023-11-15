@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Image</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #internalDiv {
+            margin: 0;
+        }
+
+        button {
+            position: absolute;
+        }
+
+
+        #formImage {
+            width: 850px;
+            height: 567px;
+            object-fit: contain;
+            object-position: center center;
+            margin: 0;
+        }
+
+        #divAll {
+            position: relative;
+            width: 850px;
+            margin: 0;
+        }
+
+        #divImage {
+            height: 567px;
+            width: 850px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            /* top: 14px; */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="divAll">
+        <img src="" id="formImage" />
+        <div id="internalDiv">
+
+        </div>
+    </div>
+    <script>
+        let image = document.getElementById('formImage');
+        aaa();
+
+        function getFullUrl(wixUrl) {
+            var str = wixUrl;
+            var startIndex = str.indexOf("v1/") + 3;
+            var endIndex = str.lastIndexOf("/");
+            var result = str.substring(startIndex, endIndex);
+            let finallSrc = 'https://static.wixstatic.com/media/' + result
+            return finallSrc;
+        }
+        function aaa() {
+            const originalWidth = 850; // original image width
+            const originalHeight = 567; // original image height
+            const newWidth = 724; // desired new width of the image
+            const newHeight = 1024; // desired new height of the image
+
+            let resizedWidth, resizedHeight;
+
+            if (newWidth > newHeight) {
+                resizedWidth = originalWidth;
+                resizedHeight = resizedWidth * (newHeight / newWidth);
+            } else {
+                resizedHeight = originalHeight;
+                resizedWidth = resizedHeight * (newWidth / newHeight);
+            }
+            let wixUrl = "wix:image://v1/3dc3a2_b52ae17a695443e7aa2044c9b395426d~mv2.jpg/1697996831732-4f26923c-734d-4c72-8a1a-39e1cb56070a_1.jpg#originWidth=724&originHeight=1024"
+            let finalUrl = getFullUrl(wixUrl);
+            let elements = '<div><h5 style="margin:0;letter-spacing:3px;color:black;position:absolute; top:26.060493827160478%;left:35.9%;font-size:10px">20231030</h5></div>'
+            let imageSrcFromSite = "https://static.wixstatic.com/media/3ab37f_d1b206f349ac4121a0ca48845a5b984f~mv2.jpg"
+            image.src = finalUrl;
+            let internalDiv = document.getElementById('internalDiv');
+            internalDiv.innerHTML = elements;
+            internalDiv.style.width = resizedWidth;
+            internalDiv.style.height = resizedHeight;
+            convertImg();
+
+        }
+        window.addEventListener('message', handleIframeMessage);
+        function handleIframeMessage(event) {
+            if (event.data.elements) {
+                let finalString = event.data.elements;
+                let imageSrc = event.data.image.src;
+                let width = event.data.image.width;
+                let height = event.data.image.height;
+                imageSrc = getFullUrl(imageSrc);
+                image.src = imageSrc;
+                const originalWidth = 850; // original image width
+                const originalHeight = 567; // original image height
+                const newWidth = width; // desired new width of the image
+                const newHeight = height; // desired new height of the image
+
+                let resizedWidth, resizedHeight;
+
+                if (newWidth > newHeight) {
+                    resizedWidth = originalWidth;
+                    resizedHeight = resizedWidth * (newHeight / newWidth);
+                } else {
+                    resizedHeight = originalHeight;
+                    resizedWidth = resizedHeight * (newWidth / newHeight);
+                }
+                image.style.width = resizedWidth;
+                image.style.height = resizedHeight;
+                finalString = finalString.replace(/(\d{4})-(\d{2})-(\d{2})/g, "$1$2$3");
+                console.log('finalString', finalString);
+                internalDiv.innerHTML = finalString;
+                internalDiv.style.width = resizedWidth;
+                internalDiv.style.height = resizedHeight;
+                document.getElementById('formImage').src = imageSrc;
+                convertImg();
+            }
+
+        }
+        function convertImg() {
+            let scale = 2;
+            const divElement = document.getElementById('divAll');
+            const imageElement = document.getElementById('your-image-element-id');
+            const options = {
+                format: 'png',
+                quality: 1,
+                width: 1700,
+                height: 1200,
+                style: {
+                    transform: 'scale(' + 2 + ')',
+                    transformOrigin: 'top left',
+                }
+            };
+            console.log('options', options);
+            domtoimage.toPng(divElement, options)
+                .then(function (dataUrl) {
+                    const capturedImage = new Image();
+                    capturedImage.src = dataUrl;
+                    console.log('dataUrl', dataUrl);
+                    window.parent.postMessage(JSON.stringify(dataUrl), 'https://yaels936.wixsite.com/dynamic-form/form');
+
+                })
+                .catch(function (error) {
+                    console.error('Error capturing the div element:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
